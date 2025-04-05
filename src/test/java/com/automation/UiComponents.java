@@ -23,6 +23,7 @@ public class UiComponents {
 		webdriver = new ChromeDriver();
 		webdriver.get("https://letcode.in/test");
 		webdriver.manage().window().maximize();
+		// implicit wait
 		webdriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 	}
 
@@ -65,9 +66,9 @@ public class UiComponents {
 		selectDropdownLink.click();
 
 		Select selectDropdown = new Select(webdriver.findElement(By.xpath("//select[@id='fruits']")));
-		 selectDropdown.selectByValue("3");
-		 selectDropdown.selectByIndex(4);
-		 selectDropdown.selectByVisibleText("Orange");
+		selectDropdown.selectByValue("3");
+		selectDropdown.selectByIndex(4);
+		selectDropdown.selectByVisibleText("Orange");
 
 		List<WebElement> fruitsList = selectDropdown.getOptions();
 		for (WebElement webelement : fruitsList) {
@@ -88,6 +89,31 @@ public class UiComponents {
 			System.out.println("Superheros list:" + webelement.getText());
 		}
 
+	}
+
+	@Test(priority = 1)
+	public void tesWindow() {
+		WebElement windowsLink = webdriver.findElement(By.partialLinkText("Tabs"));
+		// clicking on windows link
+		windowsLink.click();
+	
+		//Clicking on home page button
+		WebElement openHomeLink = webdriver.findElement(By.cssSelector("button#home"));
+		openHomeLink.click();
+		System.out.println("Parent Page Title:"+webdriver.getCurrentUrl());
+		
+		
+		Object[] windowhandles=webdriver.getWindowHandles().toArray();
+		webdriver.manage().timeouts().implicitlyWait(Duration.ofMinutes(1));
+		//switching to next tab
+		webdriver.switchTo().window((String) windowhandles[1]);
+		System.out.println("Child page Title:"+webdriver.getCurrentUrl());
+		//switching to previous tab
+		webdriver.switchTo().window((String) windowhandles[0]);
+		System.out.println("Parent page Title after switching:"+webdriver.getCurrentUrl());
+		
+		
+		
 	}
 
 	@AfterMethod
